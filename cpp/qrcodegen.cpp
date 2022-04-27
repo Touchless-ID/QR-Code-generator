@@ -75,6 +75,14 @@ QrSegment QrSegment::makeBytes(const vector<uint8_t> &data) {
 	return QrSegment(Mode::BYTE, static_cast<int>(data.size()), std::move(bb));
 }
 
+QrSegment QrSegment::makeBytes(const uint8_t* data, size_t data_size) {
+	if (data_size > static_cast<unsigned int>(INT_MAX))
+		throw std::length_error("Data too long");
+	BitBuffer bb;
+	for (size_t i = 0; i < data_size; ++i)
+		bb.appendBits(data[i], 8);
+	return QrSegment(Mode::BYTE, static_cast<int>(data_size), std::move(bb));
+}
 
 QrSegment QrSegment::makeNumeric(const char *digits) {
 	BitBuffer bb;
@@ -252,6 +260,12 @@ QrCode QrCode::encodeText(const char *text, Ecc ecl) {
 
 QrCode QrCode::encodeBinary(const vector<uint8_t> &data, Ecc ecl) {
 	vector<QrSegment> segs{QrSegment::makeBytes(data)};
+	return encodeSegments(segs, ecl);
+}
+
+
+QrCode QrCode::encodeBinary(const uint8_t *data, size_t data_size, Ecc ecl) {
+	vector<QrSegment> segs{QrSegment::makeBytes(data, data_size)};
 	return encodeSegments(segs, ecl);
 }
 

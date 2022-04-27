@@ -100,7 +100,8 @@ class QrSegment final {
 	 * can be converted to UTF-8 bytes and encoded as a byte mode segment.
 	 */
 	public: static QrSegment makeBytes(const std::vector<std::uint8_t> &data);
-	
+	public: static QrSegment makeBytes(const uint8_t* data, size_t data_size);
+
 	
 	/* 
 	 * Returns a segment representing the given string of decimal digits encoded in numeric mode.
@@ -272,6 +273,7 @@ class QrCode final {
 	 * The ECC level of the result may be higher than the ecl argument if it can be done without increasing the version.
 	 */
 	public: static QrCode encodeBinary(const std::vector<std::uint8_t> &data, Ecc ecl);
+	public: static QrCode encodeBinary(const std::uint8_t *data, size_t data_size, Ecc ecl);
 	
 	
 	/*---- Static factory functions (mid level) ----*/
